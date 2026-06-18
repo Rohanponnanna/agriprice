@@ -333,12 +333,31 @@ with tab1:
         hovertemplate="<b>%{x}</b><br>₹%{y:,.0f}/Quintal<extra></extra>",
     ))
 
-    # Divider line
+    # Divider line — using add_shape + add_annotation to avoid
+    # Plotly version bug where add_vline with annotation_text
+    # triggers an internal _mean() TypeError on string x-axis values.
     today_str = datetime.now().strftime("%Y-%m-%d")
-    fig.add_vline(
-        x=today_str, line_dash="dash", line_color="#B4B2A9",
-        annotation_text="Today", annotation_position="top right",
-        annotation_font_size=11,
+    fig.add_shape(
+        type="line",
+        x0=today_str,
+        x1=today_str,
+        y0=0,
+        y1=1,
+        xref="x",
+        yref="paper",
+        line=dict(color="#B4B2A9", dash="dash", width=1.5),
+    )
+    fig.add_annotation(
+        x=today_str,
+        y=1,
+        xref="x",
+        yref="paper",
+        text="Today",
+        showarrow=False,
+        font=dict(size=11, color="#5F5E5A"),
+        xanchor="left",
+        yanchor="bottom",
+        bgcolor="rgba(255,255,255,0.7)",
     )
 
     fig.update_layout(
